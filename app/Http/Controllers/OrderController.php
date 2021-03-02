@@ -89,7 +89,9 @@ class OrderController extends Controller
             return response()->json('Error saving order', 406);
         }
         if(!$request->filled('change')){
-            return response()->json('Error saving order', 406);
+            $change = false;
+        }else{
+            $change = true;
         }
         if(!$request->filled('address')){
             return response()->json('Error saving order', 406);
@@ -114,52 +116,56 @@ class OrderController extends Controller
             return response()->json('Error saving order', 406);
 
         }
-        // try {
-        //     $order = new Order();
-        //     $order->wayToPay = $request->get('wayToPay');
-        //     $order->change = $request->get('change');
-        //     $order->address = $request->get('address');
-        //     $order->reference =  $request->get('reference');
-        //     $order->price =  $request->get('price');
-        //     $order->status =  'null';
-        //     $order->save();
+        try {
+            $order = new Order();
+            $order->wayToPay = $request->get('wayToPay');
+            if($change == false){
+                $order->change = 0;
+            }else{
+                $order->change = $request->get('change');
+            }
+            $order->address = $request->get('address');
+            $order->reference =  $request->get('reference');
+            $order->price =  $request->get('price');
+            $order->status =  'null';
+            $order->save();
 
-        //     $requestUser = $request->get('user');
-        //     $user = new User();
-        //     $user->order_id = $order->id;
-        //     $user->name = $requestUser['name'];
-        //     $user->phone_number = $requestUser['phone_number'];
-        //     $user->save();
+            $requestUser = $request->get('user');
+            $user = new User();
+            $user->order_id = $order->id;
+            $user->name = $requestUser['name'];
+            $user->phone_number = $requestUser['phone_number'];
+            $user->save();
 
-        //     $requestProducts = $request->get('products');
-        //     for ($i=0; $i < count($requestProducts); $i++) { 
-        //         $product = new Product();
-        //         $product->order_id = $order->id;
-        //         $product->quantity = $requestProducts[$i]['quantity'];
-        //         $product->name = $requestProducts[$i]['name'];
-        //         $product->price = $requestProducts[$i]['price'];
-        //         $product->size = $requestProducts[$i]['size'];
-        //         $product->observation = $requestProducts[$i]['observation'];
+            $requestProducts = $request->get('products');
+            for ($i=0; $i < count($requestProducts); $i++) { 
+                $product = new Product();
+                $product->order_id = $order->id;
+                $product->quantity = $requestProducts[$i]['quantity'];
+                $product->name = $requestProducts[$i]['name'];
+                $product->price = $requestProducts[$i]['price'];
+                $product->size = $requestProducts[$i]['size'];
+                $product->observation = $requestProducts[$i]['observation'];
 
-        //         $product->save();
+                $product->save();
 
-        //         $additionalsProduct = $requestProducts[$i]['additionals'];
-        //         // return response()->json($additionalsProduct[0]['name']);
-        //         for ($j=0; $j < count($additionalsProduct); $j++) {
-        //             $additional = new Additional();
-        //             $additional->product_id = $product->id;
-        //             $additional->name = $additionalsProduct[$j]['name'];
-        //             $additional->type = $additionalsProduct[$j]['type'];
-        //             $additional->save();
-        //         }
-        //     }
+                $additionalsProduct = $requestProducts[$i]['additionals'];
+                // return response()->json($additionalsProduct[0]['name']);
+                for ($j=0; $j < count($additionalsProduct); $j++) {
+                    $additional = new Additional();
+                    $additional->product_id = $product->id;
+                    $additional->name = $additionalsProduct[$j]['name'];
+                    $additional->type = $additionalsProduct[$j]['type'];
+                    $additional->save();
+                }
+            }
 
-        //     broadcast(New OrderNotification( Order::getOrderById($order->id) ) );
+            broadcast(New OrderNotification( Order::getOrderById($order->id) ) );
 
-        //     return response()->json("Order created id:".$order->id, 201);
-        // } catch (ModelNotFoundException $exception) {
-        //     return response()->json('Error saving order', 406);
-        // }
+            return response()->json("Order created id:".$order->id, 201);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json('Error saving order', 406);
+        }
         
     }
 
