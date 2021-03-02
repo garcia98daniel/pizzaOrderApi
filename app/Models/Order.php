@@ -10,10 +10,6 @@ use DB;
 class Order extends Model
 {
     use HasFactory;
-    protected $table = 'Order';
-
-    //Definimos los campos que se pueden llenar con asignación masiva
-    protected $fillable = ['wayToPay', 'change', 'address', 'reference','price','type'];
 
     public function products(){
         return $this->hasmany('App\Models\Product');
@@ -27,9 +23,9 @@ class Order extends Model
     {
         // $dt = Carbon::now('America/Bogota');
         // dd($dt->copy()->startOfDay(), $dt->copy()->endOfDay());
-        $startDay = Carbon::now('America/Bogota')->startOfDay();
+        $startDay = Carbon::now()->startOfDay();
         // dd($startDay);
-        $endDay   = $startDay->copy()->endOfDay();
+        $endDay= $startDay->copy()->endOfDay();
 
         return $orders = Order::with(['user','products','products.additionals'])
         ->orderBy('orders.created_at')

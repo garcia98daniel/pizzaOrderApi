@@ -87,36 +87,28 @@ class OrderController extends Controller
 
         if(!$request->filled('wayToPay')){
             return response()->json('Error saving order', 406);
-
         }
         if(!$request->filled('change')){
             return response()->json('Error saving order', 406);
-
         }
         if(!$request->filled('address')){
             return response()->json('Error saving order', 406);
-
         }
         if(!$request->filled('reference')){
             return response()->json('Error saving order', 406);
-
         }
         if(!$request->filled('price')){
             return response()->json('Error saving order', 406);
-
         }
         $requestUser = $request->get('user');
         if(!$request->filled('user.name')){
             return response()->json('Error saving order', 406);
-
         }
         if(!$request->filled('user.phone_number')){
-            return response()->json('Error saving order', 406);
-
+            return response()->json('Error saving order',    406);
         }
         if(!$request->filled('products')){
             return response()->json('Error saving order', 406);
-
         }
         if(!$request->filled('products')){
             return response()->json('Error saving order', 406);
