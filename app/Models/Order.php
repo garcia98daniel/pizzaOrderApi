@@ -10,6 +10,10 @@ use DB;
 class Order extends Model
 {
     use HasFactory;
+    protected $table = 'Order';
+
+    //Definimos los campos que se pueden llenar con asignación masiva
+    protected $fillable = ['wayToPay', 'change', 'address', 'reference','price','type'];
 
     public function products(){
         return $this->hasmany('App\Models\Product');
@@ -21,9 +25,10 @@ class Order extends Model
 
     public static function getTodayOrders()
     {
-        // $dt = Carbon::now();
+        // $dt = Carbon::now('America/Bogota');
         // dd($dt->copy()->startOfDay(), $dt->copy()->endOfDay());
-        $startDay = Carbon::now()->startOfDay();
+        $startDay = Carbon::now('America/Bogota')->startOfDay();
+        // dd($startDay);
         $endDay   = $startDay->copy()->endOfDay();
 
         return $orders = Order::with(['user','products','products.additionals'])
@@ -32,13 +37,13 @@ class Order extends Model
         ->whereBetween('orders.created_at', [$startDay , $endDay])
         ->orWhere('orders.status','=','null')
         ->whereBetween('orders.created_at', [$startDay , $endDay])
-        // ->where('orders.created_at','=', Carbon::now()->format('Y-m-d'))
+        // ->where('orders.created_at','=', Carbon::now('America/Bogota')->format('Y-m-d'))
         ->get();
     }
 
     public static function getOrdersByDate($startDate, $endDate)
     {
-        // $dt = Carbon::now();
+        // $dt = Carbon::now('America/Bogota');
         $startDay = Carbon::parse($startDate)->startOfDay();
         $endDay   = Carbon::parse($endDate)->endOfDay();
         // dd($startDay, $endDay);
@@ -54,9 +59,9 @@ class Order extends Model
 
     public static function getTotalSales()
     {
-        // $dt = Carbon::now();
+        // $dt = Carbon::now('America/Bogota');
         // dd($dt->copy()->startOfDay(), $dt->copy()->endOfDay());
-        $startDay = Carbon::now()->startOfDay();
+        $startDay = Carbon::now('America/Bogota')->startOfDay();
         $endDay   = $startDay->copy()->endOfDay();
         // return Order::where('orders.created_at','=', $date)
         return Order::whereBetween('orders.created_at', [$startDay , $endDay])
@@ -66,7 +71,7 @@ class Order extends Model
 //usar whereBetween()->endOfday
     public static function getTotalSalesByDate($startDate, $endDate)
     {
-        // $dt = Carbon::now();
+        // $dt = Carbon::now('America/Bogota');
         // dd($dt->copy()->startOfDay(), $dt->copy()->endOfDay());
         $startDay = Carbon::parse($startDate)->startOfDay();
         $endDay   = Carbon::parse($endDate)->endOfDay();
