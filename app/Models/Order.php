@@ -10,7 +10,6 @@ use DB;
 class Order extends Model
 {
     use HasFactory;
-
     public function products(){
         return $this->hasmany('App\Models\Product');
     }
@@ -21,9 +20,10 @@ class Order extends Model
 
     public static function getTodayOrders()
     {
+        //addin comit
         // $dt = Carbon::now('America/Bogota');
         // dd($dt->copy()->startOfDay(), $dt->copy()->endOfDay());
-        $startDay = Carbon::now()->startOfDay();
+        $startDay = Carbon::now('America/Bogota')->startOfDay();
         // dd($startDay);
         $endDay= $startDay->copy()->endOfDay();
 
