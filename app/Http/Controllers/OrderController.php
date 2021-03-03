@@ -84,7 +84,6 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         // Log::info($request);
-
         if(!$request->filled('wayToPay')){
             return response()->json('Error saving order', 406);
         }
@@ -108,7 +107,7 @@ class OrderController extends Controller
         }
 
         $requestUser = $request->get('user');
-        if(!$request->filled('user.name')){
+        if(!$request->filled('user.name') ){
             return response()->json('Error saving order', 406);
         }
         if(!$request->filled('user.phone_number')){
@@ -117,6 +116,8 @@ class OrderController extends Controller
         if(empty($request->get('products'))){
             return response()->json('Error saving order', 406);
         }
+
+        $createdAt = Carbon::now();
 
         try {
             $order = new Order();
@@ -130,6 +131,7 @@ class OrderController extends Controller
             $order->reference =  $request->get('reference');
             $order->price =  $request->get('price');
             $order->status =  'null';
+            $order->created_at =  $createdAt;
             $order->save();
 
             $requestUser = $request->get('user');

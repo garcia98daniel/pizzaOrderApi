@@ -23,7 +23,7 @@ class Order extends Model
         //addin comit
         // $dt = Carbon::now('America/Bogota');
         // dd($dt->copy()->startOfDay(), $dt->copy()->endOfDay());
-        $startDay = Carbon::now('America/Bogota')->startOfDay();
+        $startDay = Carbon::now()->startOfDay();
         // dd($startDay);
         $endDay= $startDay->copy()->endOfDay();
 
